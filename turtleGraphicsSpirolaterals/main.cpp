@@ -751,44 +751,46 @@ if (drawPointLine==TRUE && !executedOnce)
 
         //Draw Simple Spirolateral (angle 90. initial segment 1, order 2, repetitions/recursion 2)
 
-        int angle=0;
+        int initialangle=0;
         int initialSegment=20;
         int order=6;
         int repetitionRecursion=2;
 
-        printf ("Enter angle: ");
-        scanf("%d",&angle);
+        printf ("Enter angle (ex. 60):  ");
+        scanf("%d",&initialangle);
 
-        printf ("Enter initialSegment length: ");
+        printf ("Enter initialSegment length (ex. 5): ");
         scanf("%d",&initialSegment);
 
-        printf ("Enter fractal order: ");
+        printf ("Enter fractal order (ex. 7): ");
         scanf("%d",&order);
 
-        printf ("Enter repetitionRecursion: ");
+        printf ("Enter repetitionRecursion (ex. 80): ");
         scanf("%d",&repetitionRecursion);
 
 
         Point end=lineStart;
 
+        int segment=0;
+        int angle=initialangle;
         for (int i=0; i<repetitionRecursion;i++)
         {
-            initialSegment=20;
+            segment=initialSegment;
 
             //draw lines sequentially based on the order of the spirolateral (in. example 2= times= 2 segments need to be drawn for the spirolateral to be completed)
             for (int j=0; j<order;j++)
             {
                 SDL_RenderPresent(renderer);
 
-                end.x=lineStart.x+initialSegment*sin(angle*M_PI/180.0f);
-                end.y=lineStart.y+initialSegment*cos(angle*M_PI/180.0f);
+                end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
+                end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
 
                 drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
                 memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
 
                 lineStart=end;
-                initialSegment*=1.5;
-                angle+=90;
+                segment*=1.5;
+                angle+=initialangle;
                 angle=fmod(angle,360.0);
 
             }
