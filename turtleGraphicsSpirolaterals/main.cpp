@@ -145,6 +145,49 @@ void drawBresenhamLine(int x,int y,int x2,int y2)
 }
 
 
+void drawVariation(int initialangle, int initialSegment, int order, int repetitionRecursion)
+{
+
+    Point end=lineStart;
+
+    int segment=0;
+    int angle=initialangle;
+    for (int i=0; i<repetitionRecursion;i++)
+    {
+        segment=initialSegment;
+//            angle=initialangle;
+
+        //draw lines sequentially based on the order of the spirolateral (in. example 2= times= 2 segments need to be drawn for the spirolateral to be completed)
+        for (int j=0; j<order;j++)
+        {
+            SDL_RenderPresent(renderer);
+
+            end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
+            end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
+
+            drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
+            memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
+
+            lineStart=end;
+            segment+=initialSegment;
+            angle-=initialangle;
+            angle=fmod(angle,360.0);
+
+            printf ("Draw with angle %d\n:", angle);
+            SDL_RenderPresent(renderer);
+
+        }
+        SDL_RenderPresent(renderer);
+    }
+
+    drawPointLine=FALSE;
+
+}
+
+int mouseX ;
+int mouseY ;
+
+
 int main(int argc, char ** argv)
 {
 
@@ -202,8 +245,108 @@ int main(int argc, char ** argv)
             {
                 memset(pixels,255,640*480*sizeof(Uint32));
                 executedOnce=FALSE;
+                break;
             }
-            break;
+
+            if (event.key.keysym.sym==SDLK_1)
+            {
+                //avoid multiple executions
+                executedOnce=TRUE;
+
+                //Line Drawing
+                //Make sure we draw the texture and THEN..we draw on the top of it for the backbuffer lines,points (for circle,rectangle)
+                SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+                Point currentmousePos(mouseX,mouseY);
+                //start line point initialized just once
+                if (!NOWDRAWING)
+                {
+                    NOWDRAWING=TRUE;
+                    lineStart=currentmousePos;
+                }
+
+                std::cout<<"lineStart="<<lineStart.x<<","<<lineStart.y<<std::endl;
+
+                //end line point
+                lineEnd=currentmousePos;
+
+                //Allocate some memory for the backbufferPixels
+                if (backbufferPixels==NULL)
+                {
+                    backbufferPixels=(Uint32*)malloc(640*480* sizeof(Uint32));
+                }
+                else
+                {
+                    memset(backbufferPixels,0,640*480* sizeof(Uint32));
+                }
+
+                //Now create the backbuffercopy of the original pixel array (our main drawing board)
+                memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
+
+
+                int initialangle=60;
+                int initialSegment=5;
+                int order=7;
+                int repetitionRecursion=6;
+
+                //draw the 1st variation
+                drawVariation(initialangle, initialSegment, order, repetitionRecursion);
+                break;
+            }
+
+
+            if (event.key.keysym.sym==SDLK_1)
+            {
+                //avoid multiple executions
+                executedOnce=TRUE;
+
+                //Line Drawing
+                //Make sure we draw the texture and THEN..we draw on the top of it for the backbuffer lines,points (for circle,rectangle)
+                SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+                Point currentmousePos(mouseX,mouseY);
+                //start line point initialized just once
+                if (!NOWDRAWING)
+                {
+                    NOWDRAWING=TRUE;
+                    lineStart=currentmousePos;
+                }
+
+                std::cout<<"lineStart="<<lineStart.x<<","<<lineStart.y<<std::endl;
+
+                //end line point
+                lineEnd=currentmousePos;
+
+                //Allocate some memory for the backbufferPixels
+                if (backbufferPixels==NULL)
+                {
+                    backbufferPixels=(Uint32*)malloc(640*480* sizeof(Uint32));
+                }
+                else
+                {
+                    memset(backbufferPixels,0,640*480* sizeof(Uint32));
+                }
+
+                //Now create the backbuffercopy of the original pixel array (our main drawing board)
+                memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
+
+
+                int initialangle=45;
+                int initialSegment=20;
+                int order=6;
+                int repetitionRecursion=2;
+
+                //draw the 1st variation
+                drawVariation(initialangle, initialSegment, order, repetitionRecursion);
+                break;
+            }
+
+            if (event.key.keysym.sym==SDLK_ESCAPE)
+            {
+                quit=TRUE;
+                break;
+            }
+
 
 
         case SDL_MOUSEBUTTONUP:
@@ -243,6 +386,8 @@ int main(int argc, char ** argv)
                 {
                     leftMouseButtonDown = true;
                     drawPointLine=TRUE;
+
+                    SDL_GetMouseState( &mouseX, &mouseY );
                 }
 
             }
@@ -259,106 +404,103 @@ int main(int argc, char ** argv)
         case SDL_QUIT:
             quit = true;
             break;
+
+
         }
 
 
-int mouseX = event.motion.x;
-int mouseY = event.motion.y;
 
 if (drawPointLine==TRUE && !executedOnce)
 {
-        //avoid multiple executions
-        executedOnce=TRUE;
+//        //avoid multiple executions
+//        executedOnce=TRUE;
 
-        //Line Drawing
-        //Make sure we draw the texture and THEN..we draw on the top of it for the backbuffer lines,points (for circle,rectangle)
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
+//        //Line Drawing
+//        //Make sure we draw the texture and THEN..we draw on the top of it for the backbuffer lines,points (for circle,rectangle)
+//        SDL_RenderCopy(renderer, texture, NULL, NULL);
 
-        Point currentmousePos(mouseX,mouseY);
-        //start line point initialized just once
-        if (!NOWDRAWING)
-        {
-            NOWDRAWING=TRUE;
-            lineStart=currentmousePos;
-        }
+//        Point currentmousePos(mouseX,mouseY);
+//        //start line point initialized just once
+//        if (!NOWDRAWING)
+//        {
+//            NOWDRAWING=TRUE;
+//            lineStart=currentmousePos;
+//        }
 
-        std::cout<<"lineStart="<<lineStart.x<<","<<lineStart.y<<std::endl;
+//        std::cout<<"lineStart="<<lineStart.x<<","<<lineStart.y<<std::endl;
 
-        //end line point
-        lineEnd=currentmousePos;
+//        //end line point
+//        lineEnd=currentmousePos;
 
-        //Allocate some memory for the backbufferPixels
-        if (backbufferPixels==NULL)
-        {
-            backbufferPixels=(Uint32*)malloc(640*480* sizeof(Uint32));
-        }
-        else
-        {
-            memset(backbufferPixels,0,640*480* sizeof(Uint32));
-        }
+//        //Allocate some memory for the backbufferPixels
+//        if (backbufferPixels==NULL)
+//        {
+//            backbufferPixels=(Uint32*)malloc(640*480* sizeof(Uint32));
+//        }
+//        else
+//        {
+//            memset(backbufferPixels,0,640*480* sizeof(Uint32));
+//        }
 
-        //Now create the backbuffercopy of the original pixel array (our main drawing board)
-        memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
+//        //Now create the backbuffercopy of the original pixel array (our main drawing board)
+//        memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
 
         //Draw Simple Spirolateral (angle 90. initial segment 1, order 2, repetitions/recursion 2)
 
-        int initialangle=0;
-        int initialSegment=20;
-        int order=6;
-        int repetitionRecursion=2;
+//        int initialangle=45;
+//        int initialSegment=20;
+//        int order=6;
+//        int repetitionRecursion=2;
 
-        printf ("Enter angle (ex. 60):  ");
-        scanf("%d",&initialangle);
+//        printf ("Enter angle (ex. 60):  ");
+//        scanf("%d",&initialangle);
 
-        printf ("Enter initialSegment length (ex. 5): ");
-        scanf("%d",&initialSegment);
+//        printf ("Enter initialSegment length (ex. 5): ");
+//        scanf("%d",&initialSegment);
 
-        printf ("Enter fractal order (ex. 7): ");
-        scanf("%d",&order);
+//        printf ("Enter fractal order (ex. 7): ");
+//        scanf("%d",&order);
 
-        printf ("Enter repetitionRecursion (ex. 80): ");
-        scanf("%d",&repetitionRecursion);
+//        printf ("Enter repetitionRecursion (ex. 80): ");
+//        scanf("%d",&repetitionRecursion);
 
 
-        Point end=lineStart;
+//        Point end=lineStart;
 
-        int segment=0;
-        int angle=initialangle;
-        for (int i=0; i<repetitionRecursion;i++)
-        {
-            segment=initialSegment;
-//            angle=initialangle;
+//        int segment=0;
+//        int angle=initialangle;
+//        for (int i=0; i<repetitionRecursion;i++)
+//        {
+//            segment=initialSegment;
+////            angle=initialangle;
 
-            //draw lines sequentially based on the order of the spirolateral (in. example 2= times= 2 segments need to be drawn for the spirolateral to be completed)
-            for (int j=0; j<order;j++)
-            {
-                SDL_RenderPresent(renderer);
+//            //draw lines sequentially based on the order of the spirolateral (in. example 2= times= 2 segments need to be drawn for the spirolateral to be completed)
+//            for (int j=0; j<order;j++)
+//            {
+//                SDL_RenderPresent(renderer);
 
-                end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
-                end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
+//                end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
+//                end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
 
-                drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
-                memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
+//                drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
+//                memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
 
-                lineStart=end;
-                segment+=initialSegment;
-                angle-=initialangle;
-                angle=fmod(angle,360.0);
+//                lineStart=end;
+//                segment+=initialSegment;
+//                angle-=initialangle;
+//                angle=fmod(angle,360.0);
 
-                printf ("Draw with angle %d\n:", angle);
+//                printf ("Draw with angle %d\n:", angle);
 
-            }
-            SDL_RenderPresent(renderer);
-        }
+//            }
+//            SDL_RenderPresent(renderer);
+//        }
 
-        drawPointLine=FALSE;
+//        drawPointLine=FALSE;
 }
 
 
-
-
-
-        // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
+        //show white background at first before the mouse click on the window
         if(!leftMouseButtonDown)
         {
             SDL_RenderCopy(renderer, texture, NULL, NULL);

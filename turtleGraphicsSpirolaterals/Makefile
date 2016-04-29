@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = clang
 CXX           = clang++
-DEFINES       = 
-CFLAGS        = -pipe -g -Wall -W -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I. -I/usr/include -Iinclude -I/opt/qt/5.5/gcc_64/mkspecs/linux-clang
+DEFINES       = -DQT_GUI_LIB -DQT_CORE_LIB
+CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+INCPATH       = -I. -I/usr/include -Iinclude -I/opt/qt/5.5/gcc_64/include -I/opt/qt/5.5/gcc_64/include/QtGui -I/opt/qt/5.5/gcc_64/include/QtCore -I. -I/opt/qt/5.5/gcc_64/mkspecs/linux-clang
 QMAKE         = /opt/qt/5.5/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,8 +35,8 @@ COMPRESS      = gzip -9f
 DISTNAME      = turtleGraphicsSpirolaterals1.0.0
 DISTDIR = /home/yioannidis/Downloads/c/Eike\ C/assignment2016/turtleGraphicsSpirolaterals/turtleGraphicsSpirolaterals/.tmp/turtleGraphicsSpirolaterals1.0.0
 LINK          = clang++
-LFLAGS        = -ccc-gcc-name g++ -Wl,-rpath,/opt/qt/5.5/gcc_64
-LIBS          = $(SUBLIBS) -L/usr/lib -L/home/yioannidis/Downloads/c/Eike\ C/assignment2016/turtleGraphicsSpirolaterals/turtleGraphicsSpirolaterals/lib/ -lSDL2main -lSDL2_image -lSDL2_ttf -lSDL2 
+LFLAGS        = -ccc-gcc-name g++ -Wl,-rpath,/opt/qt/5.5/gcc_64 -Wl,-rpath,/opt/qt/5.5/gcc_64/lib
+LIBS          = $(SUBLIBS) -L/usr/lib -L/home/yioannidis/Downloads/c/Eike\ C/assignment2016/turtleGraphicsSpirolaterals/turtleGraphicsSpirolaterals/lib/ -lSDL2main -lSDL2_image -lSDL2_ttf -lSDL2 -L/opt/qt/5.5/gcc_64/lib -lQt5Gui -L/usr/lib64 -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -50,38 +50,7 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp 
 OBJECTS       = main.o
-DIST          = turtleGraphicsSpirolaterals.pro  main.cpp
-QMAKE_TARGET  = turtleGraphicsSpirolaterals
-DESTDIR       = #avoid trailing-slash linebreak
-TARGET        = turtleGraphicsSpirolaterals
-
-
-first: all
-####### Implicit rules
-
-.SUFFIXES: .o .c .cpp .cc .cxx .C
-
-.cpp.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
-
-.cc.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
-
-.cxx.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
-
-.C.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
-
-.c.o:
-	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
-
-####### Build rules
-
-$(TARGET):  $(OBJECTS)  
-	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
-
-Makefile: turtleGraphicsSpirolaterals.pro ../../../../../../.qmake.cache /opt/qt/5.5/gcc_64/mkspecs/linux-clang/qmake.conf /opt/qt/5.5/gcc_64/mkspecs/features/spec_pre.prf \
+DIST          = /opt/qt/5.5/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/common/unix.conf \
 		/opt/qt/5.5/gcc_64/mkspecs/common/linux.conf \
 		/opt/qt/5.5/gcc_64/mkspecs/common/sanitize.conf \
@@ -195,17 +164,182 @@ Makefile: turtleGraphicsSpirolaterals.pro ../../../../../../.qmake.cache /opt/qt
 		/opt/qt/5.5/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/linux-clang/qmake.conf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/spec_post.prf \
-		../../../../../../.qmake.cache \
 		/opt/qt/5.5/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/default_pre.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/resolve_config.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/default_post.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/warn_on.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/qt.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/resources.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/moc.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/unix/opengl.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/unix/thread.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/testcase_targets.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/exceptions.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/yacc.prf \
 		/opt/qt/5.5/gcc_64/mkspecs/features/lex.prf \
-		turtleGraphicsSpirolaterals.pro
+		turtleGraphicsSpirolaterals.pro  main.cpp
+QMAKE_TARGET  = turtleGraphicsSpirolaterals
+DESTDIR       = #avoid trailing-slash linebreak
+TARGET        = turtleGraphicsSpirolaterals
+
+
+first: all
+####### Implicit rules
+
+.SUFFIXES: .o .c .cpp .cc .cxx .C
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.cc.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.cxx.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.C.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$<"
+
+.c.o:
+	$(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$<"
+
+####### Build rules
+
+$(TARGET):  $(OBJECTS)  
+	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+
+Makefile: turtleGraphicsSpirolaterals.pro /opt/qt/5.5/gcc_64/mkspecs/linux-clang/qmake.conf /opt/qt/5.5/gcc_64/mkspecs/features/spec_pre.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/common/unix.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/common/linux.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/common/sanitize.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/common/gcc-base.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/common/gcc-base-unix.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/common/clang.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/qconfig.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dcore.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dcore_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dinput.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dinput_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dquick.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dquick_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dquickrenderer.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3dquickrenderer_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3drenderer.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_3drenderer_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_concurrent.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_core.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_core_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_dbus.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_declarative.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_designer.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_designer_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_enginio.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_gui.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_gui_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_help.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_help_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_location.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_location_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_multimedia.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_network.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_network_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_nfc.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_opengl.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_positioning.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_printsupport.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_qml.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_qml_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_qmltest.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_quick.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_quick_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_script.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_script_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_scripttools.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_sensors.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_serialport.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_sql.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_sql_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_svg.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_svg_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_testlib.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_uiplugin.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_uitools.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webchannel.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webengine.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webkit.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_webview_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_xml.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_xml_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/opt/qt/5.5/gcc_64/mkspecs/features/qt_functions.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/qt_config.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/linux-clang/qmake.conf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/spec_post.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/exclusive_builds.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/default_pre.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/resolve_config.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/default_post.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/warn_on.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/qt.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/resources.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/moc.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/unix/opengl.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/unix/thread.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/testcase_targets.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/exceptions.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/yacc.prf \
+		/opt/qt/5.5/gcc_64/mkspecs/features/lex.prf \
+		turtleGraphicsSpirolaterals.pro \
+		/opt/qt/5.5/gcc_64/lib/libQt5Gui.prl \
+		/opt/qt/5.5/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -spec linux-clang CONFIG+=debug -o Makefile turtleGraphicsSpirolaterals.pro
 /opt/qt/5.5/gcc_64/mkspecs/features/spec_pre.prf:
 /opt/qt/5.5/gcc_64/mkspecs/common/unix.conf:
@@ -321,17 +455,23 @@ Makefile: turtleGraphicsSpirolaterals.pro ../../../../../../.qmake.cache /opt/qt
 /opt/qt/5.5/gcc_64/mkspecs/features/qt_config.prf:
 /opt/qt/5.5/gcc_64/mkspecs/linux-clang/qmake.conf:
 /opt/qt/5.5/gcc_64/mkspecs/features/spec_post.prf:
-../../../../../../.qmake.cache:
 /opt/qt/5.5/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/default_pre.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/resolve_config.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/default_post.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/warn_on.prf:
+/opt/qt/5.5/gcc_64/mkspecs/features/qt.prf:
+/opt/qt/5.5/gcc_64/mkspecs/features/resources.prf:
+/opt/qt/5.5/gcc_64/mkspecs/features/moc.prf:
+/opt/qt/5.5/gcc_64/mkspecs/features/unix/opengl.prf:
+/opt/qt/5.5/gcc_64/mkspecs/features/unix/thread.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/testcase_targets.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/exceptions.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/yacc.prf:
 /opt/qt/5.5/gcc_64/mkspecs/features/lex.prf:
 turtleGraphicsSpirolaterals.pro:
+/opt/qt/5.5/gcc_64/lib/libQt5Gui.prl:
+/opt/qt/5.5/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-clang CONFIG+=debug -o Makefile turtleGraphicsSpirolaterals.pro
 
@@ -346,6 +486,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -360,8 +501,18 @@ distclean: clean
 
 ####### Sub-libraries
 
+mocclean: compiler_moc_header_clean compiler_moc_source_clean
+
+mocables: compiler_moc_header_make_all compiler_moc_source_make_all
+
 check: first
 
+compiler_rcc_make_all:
+compiler_rcc_clean:
+compiler_moc_header_make_all:
+compiler_moc_header_clean:
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
@@ -495,7 +646,61 @@ main.o: main.cpp include/SDL.h \
 		include/SDL_render.h \
 		include/SDL_system.h \
 		include/SDL_timer.h \
-		include/SDL_version.h
+		include/SDL_version.h \
+		/opt/qt/5.5/gcc_64/include/QtCore/QString \
+		/opt/qt/5.5/gcc_64/include/QtCore/qstring.h \
+		/usr/include/QtCore/qchar.h \
+		/usr/include/QtCore/qglobal.h \
+		/usr/include/QtCore/qconfig.h \
+		/usr/include/QtCore/qconfig-64.h \
+		/usr/include/QtCore/qfeatures.h \
+		/usr/include/QtCore/qbytearray.h \
+		/usr/include/QtCore/qatomic.h \
+		/usr/include/QtCore/qbasicatomic.h \
+		/usr/include/QtCore/qatomic_bootstrap.h \
+		/usr/include/QtCore/qatomic_arch.h \
+		/usr/include/QtCore/qatomic_integrity.h \
+		/usr/include/QtCore/qatomic_vxworks.h \
+		/usr/include/QtCore/qatomic_powerpc.h \
+		/usr/include/QtCore/qatomic_alpha.h \
+		/usr/include/QtCore/qatomic_arm.h \
+		/usr/include/QtCore/qatomic_armv7.h \
+		/usr/include/QtCore/qatomic_armv6.h \
+		/usr/include/QtCore/qatomic_armv5.h \
+		/usr/include/QtCore/qatomic_avr32.h \
+		/usr/include/QtCore/qatomic_bfin.h \
+		/usr/include/QtCore/qatomic_generic.h \
+		/usr/include/QtCore/qatomic_i386.h \
+		/usr/include/QtCore/qatomic_ia64.h \
+		/usr/include/QtCore/qatomic_macosx.h \
+		/usr/include/QtCore/qatomic_x86_64.h \
+		/usr/include/QtCore/qatomic_mips.h \
+		/usr/include/QtCore/qatomic_parisc.h \
+		/usr/include/QtCore/qatomic_s390.h \
+		/usr/include/QtCore/qatomic_sparc.h \
+		/usr/include/QtCore/qatomic_windows.h \
+		/usr/include/QtCore/qatomic_windowsce.h \
+		/usr/include/QtCore/qatomic_symbian.h \
+		/usr/include/QtCore/qatomic_sh.h \
+		/usr/include/QtCore/qatomic_sh4a.h \
+		/usr/include/QtCore/qatomic_aarch64.h \
+		/usr/include/QtCore/qnamespace.h \
+		/usr/include/QtCore/qstring.h \
+		/usr/include/Qt3Support/q3cstring.h \
+		/usr/include/QtCore/qstringbuilder.h \
+		/usr/include/QtCore/qmap.h \
+		/usr/include/QtCore/qiterator.h \
+		/usr/include/QtCore/qlist.h \
+		/usr/include/QtCore/qalgorithms.h \
+		/usr/include/limits.h \
+		/usr/include/bits/posix1_lim.h \
+		/usr/include/bits/local_lim.h \
+		/usr/include/linux/limits.h \
+		/usr/include/bits/posix2_lim.h \
+		/usr/include/bits/xopen_lim.h \
+		/opt/qt/5.5/gcc_64/include/QtCore/qrefcount.h \
+		/opt/qt/5.5/gcc_64/include/QtCore/QRegExp \
+		/opt/qt/5.5/gcc_64/include/QtCore/qregexp.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 ####### Install
