@@ -151,7 +151,8 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
     Point end=lineStart;
 
     int segment=0;
-    int angle=initialangle;
+    int angle=0;
+
     for (int i=0; i<repetitionRecursion;i++)
     {
         segment=initialSegment;
@@ -160,21 +161,29 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
         //draw lines sequentially based on the order of the spirolateral (in. example 2= times= 2 segments need to be drawn for the spirolateral to be completed)
         for (int j=0; j<order;j++)
         {
-            SDL_RenderPresent(renderer);
+//            if(fmod(angle,360.0)!=0)
+            {
+                std::cout<<"angle="<<angle<<std::endl;
 
-            end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
-            end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
 
-            drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
-            memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
+                end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
+                end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
 
-            lineStart=end;
-            segment+=initialSegment;
-            angle-=initialangle;
-            angle=fmod(angle,360.0);
+                drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
+                memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
 
-            printf ("Draw with angle %d\n:", angle);
-            SDL_RenderPresent(renderer);
+                lineStart=end;
+                segment+=initialSegment;
+                angle-=initialangle;
+                angle=fmod(angle,360.0);
+
+                printf ("Draw with angle %d\n:", angle);
+                SDL_RenderPresent(renderer);
+            }
+//            else
+//            {
+//                break;
+//            }
 
         }
         SDL_RenderPresent(renderer);
@@ -284,10 +293,12 @@ int main(int argc, char ** argv)
                 memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
 
 
-                int initialangle=60;
-                int initialSegment=5;
-                int order=7;
-                int repetitionRecursion=6;
+                int initialangle=45;
+                int initialSegment=20;
+                int order=3;
+                int repetitionRecursion=8;
+
+                //initialangle=180/order;
 
                 //draw the 1st variation
                 drawVariation(initialangle, initialSegment, order, repetitionRecursion);
@@ -331,10 +342,10 @@ int main(int argc, char ** argv)
                 memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
 
 
-                int initialangle=45;
+                int initialangle=-45;
                 int initialSegment=20;
-                int order=6;
-                int repetitionRecursion=2;
+                int order=1;
+                int repetitionRecursion=1;
 
                 //draw the 1st variation
                 drawVariation(initialangle, initialSegment, order, repetitionRecursion);
