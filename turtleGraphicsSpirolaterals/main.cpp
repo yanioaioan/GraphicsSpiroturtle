@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <SDL2/SDL_image.h>
 
 bool leftMouseButtonDown = false;
 bool quit = false;
@@ -50,10 +51,18 @@ const char * path="toolbox.png";
 SDL_Surface* loadedSurface;
 SDL_Surface * surf;
 
-SDL_Surface* formattedSurface;
 SDL_Surface* formattedSurface2;
+SDL_Surface* controlsSurfaceBlackDots;
+SDL_Surface* controlsSurfaceRedDots;
+
+
 
 SDL_Texture * texture2;
+SDL_Texture * blackDotsTexture;
+SDL_Texture * redDotsTexture;
+
+int moveRedDotRighCoef=0;
+
 
 
 typedef struct Point
@@ -166,15 +175,16 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
                 std::cout<<"angle="<<angle<<std::endl;
 
 
-                end.x=lineStart.x+segment*sin(angle*M_PI/180.0f);
-                end.y=lineStart.y+segment*cos(angle*M_PI/180.0f);
+                end.x=lineStart.x+segment*cos(angle*(M_PI/180.0f));
+                end.y=lineStart.y+segment*sin(angle*(M_PI/180.0f));
 
                 drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
+                //SDL_RenderDrawLine(renderer, lineStart.x,lineStart.y, end.x,end.y);
                 memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
 
                 lineStart=end;
                 segment+=initialSegment;
-                angle-=initialangle;
+                angle+=initialangle;//2*
                 angle=fmod(angle,360.0);
 
                 printf ("Draw with angle %d\n:", angle);
@@ -195,7 +205,7 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
 
 int mouseX ;
 int mouseY ;
-
+int repetitionRecursion=30;
 
 int main(int argc, char ** argv)
 {
@@ -210,6 +220,13 @@ int main(int argc, char ** argv)
 
     surf = SDL_CreateRGBSurface(0,640,480,32,0,0,0,0);
     formattedSurface2 = SDL_ConvertSurfaceFormat( surf, SDL_PIXELFORMAT_ARGB8888, NULL );
+
+    controlsSurfaceBlackDots = IMG_Load("controls.png");
+    blackDotsTexture = SDL_CreateTextureFromSurface(renderer, controlsSurfaceBlackDots);
+
+    controlsSurfaceRedDots = IMG_Load("slider.png");
+    redDotsTexture = SDL_CreateTextureFromSurface(renderer, controlsSurfaceRedDots);
+
     if( formattedSurface2 == NULL )
     {
         printf( "Unable to convert loaded surface to display format! SDL Error: %s\n", SDL_GetError() );
@@ -292,13 +309,20 @@ int main(int argc, char ** argv)
                 //Now create the backbuffercopy of the original pixel array (our main drawing board)
                 memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
 
-
-                int initialangle=45;
+                // variation 1
+                int initialangle=84;
                 int initialSegment=20;
-                int order=3;
-                int repetitionRecursion=8;
+                int order=4;
+//                int repetitionRecursion=30;
 
-                //initialangle=180/order;
+                // variation 2
+                //int initialangle=90;
+                //int initialSegment=20;
+                //int order=5;
+                //int repetitionRecursion=4;
+
+
+//                initialangle=180/order;
 
                 //draw the 1st variation
                 drawVariation(initialangle, initialSegment, order, repetitionRecursion);
@@ -306,7 +330,7 @@ int main(int argc, char ** argv)
             }
 
 
-            if (event.key.keysym.sym==SDLK_1)
+            if (event.key.keysym.sym==SDLK_2)
             {
                 //avoid multiple executions
                 executedOnce=TRUE;
@@ -399,6 +423,31 @@ int main(int argc, char ** argv)
                     drawPointLine=TRUE;
 
                     SDL_GetMouseState( &mouseX, &mouseY );
+
+                    std::cout<<mouseX<<","<<mouseY<<std::endl;
+
+                    //put the red dot to the leftmost blackdot
+                    if( (mouseX >3 && mouseX <23) && (mouseY >425 && mouseY <443) )
+                    {
+                        moveRedDotRighCoef=0;
+                        repetitionRecursion=10;
+                    }
+
+
+                    //put the red dot to the leftmost blackdot
+                    if( (mouseX >40 && mouseX <57) && (mouseY >425 && mouseY <443) )
+                    {
+                        moveRedDotRighCoef=1;
+                        repetitionRecursion=20;
+                    }
+
+                    //put the red dot to the rightmost blackdot
+                    if( (mouseX >75 && mouseX <91) && (mouseY >425 && mouseY <443) )
+                    {
+                        moveRedDotRighCoef=2;
+                        repetitionRecursion=30;
+                    }
+
                 }
 
             }
@@ -510,12 +559,37 @@ if (drawPointLine==TRUE && !executedOnce)
 //        drawPointLine=FALSE;
 }
 
-
         //show white background at first before the mouse click on the window
         if(!leftMouseButtonDown)
         {
+
             SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+
+
         }
+
+        //red dots
+        SDL_Rect reddotsRec;
+        int moveReadSliderValue=35;//constant move to the right
+
+        reddotsRec.x = 3+moveRedDotRighCoef*moveReadSliderValue;
+        reddotsRec.y = 480-59;
+        reddotsRec.w = 20;
+        reddotsRec.h = 20;
+
+
+        //black dots
+        SDL_Rect blackdotsRec;
+
+        blackdotsRec.x = 0;
+        blackdotsRec.y = 480-100;
+        blackdotsRec.w = 100;
+        blackdotsRec.h = 100;
+
+        SDL_RenderCopy(renderer, blackDotsTexture, NULL, &blackdotsRec);
+
+        SDL_RenderCopy(renderer, redDotsTexture, NULL, &reddotsRec);
 
         //update the rendered image
         SDL_RenderPresent(renderer);
