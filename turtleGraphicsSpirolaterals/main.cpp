@@ -1,3 +1,5 @@
+//http://www.geogebra.org/m/422555
+
 #include <iostream>
 #include <SDL.h>
 #include <math.h>
