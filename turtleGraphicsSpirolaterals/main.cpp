@@ -164,18 +164,18 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
     int segment=0;
     int angle=0;
 
-    for (int i=0; i<repetitionRecursion;i++)
+    for (int i=0; i<repetitionRecursion;i++)//to create a full shape
     {
         segment=initialSegment;
 //            angle=initialangle;
 
         //draw lines sequentially based on the order of the spirolateral (in. example 2= times= 2 segments need to be drawn for the spirolateral to be completed)
-        for (int j=0; j<order;j++)
+        for (int j=0; j<order;j++)//number of turns
         {
 //            if(fmod(angle,360.0)!=0)
             {
                 std::cout<<"angle="<<angle<<std::endl;
-
+                angle+=(2*initialangle);//2*
 
                 end.x=lineStart.x+segment*cos(angle*(M_PI/180.0f));
                 end.y=lineStart.y+segment*sin(angle*(M_PI/180.0f));
@@ -186,11 +186,15 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
 
                 lineStart=end;
                 segment+=initialSegment;
-                angle+=initialangle;//2*
+
+                //angle*=2;
                 angle=fmod(angle,360.0);
+
+
 
                 printf ("Draw with angle %d\n:", angle);
                 SDL_RenderPresent(renderer);
+                SDL_Delay(100);
             }
 //            else
 //            {
@@ -251,7 +255,7 @@ int main(int argc, char ** argv)
     SDL_FreeSurface( surf );
 
 
-    memset(pixels, 255, 640 * 480 * sizeof(Uint32));
+    memset(pixels, 255, 640 * 480 * sizeof(Uint32));//set to white
 
 
     while (!quit)
@@ -271,6 +275,7 @@ int main(int argc, char ** argv)
 
             if (event.key.keysym.sym==SDLK_SPACE)
             {
+                //clear backround to white
                 memset(pixels,255,640*480*sizeof(Uint32));
                 executedOnce=FALSE;
                 break;
@@ -312,9 +317,9 @@ int main(int argc, char ** argv)
                 memcpy(backbufferPixels, pixels,  640 * 480 * sizeof(Uint32));
 
                 // variation 1
-                int initialangle=84;
-                int initialSegment=20;
-                int order=4;
+//                int initialangle=84;
+//                int initialSegment=20;
+//                int order=4;
 //                int repetitionRecursion=30;
 
                 // variation 2
@@ -322,6 +327,11 @@ int main(int argc, char ** argv)
                 //int initialSegment=20;
                 //int order=5;
                 //int repetitionRecursion=4;
+
+                repetitionRecursion=3;
+                int initialangle=60;
+                int initialSegment=30;
+                int order=4;
 
 
 //                initialangle=180/order;
@@ -564,11 +574,8 @@ if (drawPointLine==TRUE && !executedOnce)
         //show white background at first before the mouse click on the window
         if(!leftMouseButtonDown)
         {
-
+            //update rendere with a copy of the texture
             SDL_RenderCopy(renderer, texture, NULL, NULL);
-
-
-
         }
 
         //red dots
