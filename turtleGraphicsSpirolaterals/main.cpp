@@ -173,9 +173,9 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
         for (int j=0; j<order;j++)//number of turns
         {
 //            if(fmod(angle,360.0)!=0)
-            {
-                std::cout<<"angle="<<angle<<std::endl;
+            {                                
                 angle+=(2*initialangle);//2*
+                printf ("\nDraw with angle %d\n:", angle);
 
                 end.x=lineStart.x+segment*cos(angle*(M_PI/180.0f));
                 end.y=lineStart.y+segment*sin(angle*(M_PI/180.0f));
@@ -192,7 +192,7 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
 
 
 
-                printf ("Draw with angle %d\n:", angle);
+
                 SDL_RenderPresent(renderer);
                 SDL_Delay(100);
             }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.3.1, 2017-12-13T08:30:24. -->
+<!-- Written by QtCreator 4.3.1, 2017-12-13T09:05:02. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -443,7 +443,7 @@
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">turtleGraphicsSpirolaterals.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
-    <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>
+    <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">true</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">/home/yioannidis/Downloads/c/Eike_C/assignment2016/turtleGraphicsSpirolaterals/turtleGraphicsSpirolaterals</value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
