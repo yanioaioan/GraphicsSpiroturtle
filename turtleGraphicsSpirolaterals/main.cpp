@@ -586,6 +586,7 @@ if (drawPointLine==TRUE && !executedOnce)
         SDL_Rect reddotsRec;
         int moveReadSliderValue=35;//constant move to the right
 
+        //red rectangle moves on the top of the black dots
         reddotsRec.x = 3+moveRedDotRighCoef*moveReadSliderValue;
         reddotsRec.y = 480-59;
         reddotsRec.w = 20;
@@ -595,6 +596,7 @@ if (drawPointLine==TRUE && !executedOnce)
         //black dots
         SDL_Rect blackdotsRec;
 
+        //black dots stay where they are
         blackdotsRec.x = 0;
         blackdotsRec.y = 480-100;
         blackdotsRec.w = 100;
