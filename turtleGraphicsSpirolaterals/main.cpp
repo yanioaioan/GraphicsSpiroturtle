@@ -173,7 +173,8 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
         for (int j=0; j<order;j++)//number of turns
         {
 //            if(fmod(angle,360.0)!=0)
-            {                                
+            {
+                //new angle
                 angle+=(2*initialangle);//2*
                 printf ("\nDraw with angle %d\n:", angle);
 
@@ -182,17 +183,20 @@ void drawVariation(int initialangle, int initialSegment, int order, int repetiti
 
                 drawBresenhamLine(lineStart.x,lineStart.y, end.x,end.y);
                 //SDL_RenderDrawLine(renderer, lineStart.x,lineStart.y, end.x,end.y);
+
+                //copy the "backbufferPixels" pixels just edited in drawBresenhamLine function back to pixels, to show them, otherwise they disappear after they are drawn
                 memcpy(pixels,backbufferPixels,640*480*sizeof(Uint32));
 
+                //new start
                 lineStart=end;
+                //increase segment
                 segment+=initialSegment;
 
                 //angle*=2;
+                //restrict to circle
                 angle=fmod(angle,360.0);
 
-
-
-
+                //show the renderer after each line is drawn with some delay
                 SDL_RenderPresent(renderer);
                 SDL_Delay(100);
             }
@@ -446,7 +450,7 @@ int main(int argc, char ** argv)
                     }
 
 
-                    //put the red dot to the leftmost blackdot
+                    //put the red dot to the midle blackdot
                     if( (mouseX >40 && mouseX <57) && (mouseY >425 && mouseY <443) )
                     {
                         moveRedDotRighCoef=1;
